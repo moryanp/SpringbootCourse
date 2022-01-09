@@ -1,27 +1,33 @@
 package com.barralagart.course.resources;
 
-import com.barralagart.course.entities.User;
+import java.util.List;
 
+import com.barralagart.course.entities.User;
+import com.barralagart.course.services.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping
+@RequestMapping(value = "/users")
 public class UserResource {
 
-    @GetMapping("/users")
-    public ResponseEntity<User> findAll() {
+    @Autowired
+    private UserService service;
 
-        User u = new User(1, "Natan", "natan@email.com", "45991534092", "1234");
-
-        return ResponseEntity.ok().body(u);
+    @GetMapping
+    public ResponseEntity<List<User>> findAll() {
+        List<User> list = service.findAll();
+        return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "Bitch") String name) {
-        return "Hello, " + name;
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj);
     }
 }
