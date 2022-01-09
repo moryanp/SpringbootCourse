@@ -2,11 +2,19 @@ package com.barralagart.course.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class User implements Serializable {
     // Serializible é usado para permitir que os dados sejam transformados em
     // cadeias de bytes, de forma que possam ser gravados em arquivos, trafeguem na
     // rede etc.
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String email;
