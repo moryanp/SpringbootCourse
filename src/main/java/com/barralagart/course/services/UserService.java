@@ -3,6 +3,8 @@ package com.barralagart.course.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import com.barralagart.course.entities.User;
 import com.barralagart.course.repositories.UserRepository;
 import com.barralagart.course.services.exceptions.DatabaseException;
@@ -43,9 +45,14 @@ public class UserService {
     }
 
     public User update(Long id, User obj) {
-        User entity = repository.getById(id);
-        updateData(entity, obj);
-        return repository.save(entity);
+        try {
+            User entity = repository.getById(id);
+            updateData(entity, obj);
+
+            return repository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User obj) {
